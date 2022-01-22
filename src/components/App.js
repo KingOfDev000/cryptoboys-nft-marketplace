@@ -121,13 +121,15 @@ class App extends Component {
           .cryptoBoyCounter()
           .call();
         this.setState({ cryptoBoysCount });
-        for (var i = 1; i <= cryptoBoysCount; i++) {
-          const cryptoBoy = await cryptoBoysContract.methods
+        if (typeof(cryptoBoysCount) === 'number') {
+          for (var i = 1; i <= cryptoBoysCount; i++) {
+            const cryptoBoy = await cryptoBoysContract.methods
             .allCryptoBoys(i)
             .call();
-          this.setState({
-            cryptoBoys: [...this.state.cryptoBoys, cryptoBoy],
-          });
+            this.setState({
+              cryptoBoys: [...this.state.cryptoBoys, cryptoBoy],
+            });
+          }
         }
         let totalTokensMinted = await cryptoBoysContract.methods
           .getNumberOfTokensMinted()
@@ -161,9 +163,9 @@ class App extends Component {
           cryptoBoys: this.state.cryptoBoys.map((cryptoboy) =>
             cryptoboy.tokenId.toNumber() === Number(metaData.tokenId)
               ? {
-                  ...cryptoboy,
-                  metaData,
-                }
+                ...cryptoboy,
+                metaData,
+              }
               : cryptoboy
           ),
         });
